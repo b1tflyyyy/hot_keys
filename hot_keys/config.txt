@@ -1,0 +1,2 @@
+double_buttons: 1; button_1 = 0x30, button_2 = 0x40; path->C:\\double_button
+double_buttons: 0; button_1 = 0x50; path->C:\\single_button
