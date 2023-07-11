@@ -110,7 +110,7 @@ void Parser::m_set_to_map()
         val = m_parse_button_value(m_all_data[i]);
         path = m_parse_path(m_all_data[i]);
 
-        m_single_button[val] = path;
+        m_single_button.emplace(val, path);
     }
 }
 

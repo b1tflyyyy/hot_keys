@@ -1,8 +1,2 @@
-double_buttons: 1; button_1 = 0x30; button_2 = 0x40; path->C:\\double_button;
-double_buttons: 0; button_1 = 0x50; path->C:\\single_button1;
-double_buttons: 0; button_1 = 0x60; path->C:\\single_button2;
-double_buttons: 0; button_1 = 0x70; path->C:\\single_button3;
-double_buttons: 0; button_1 = 0x80; path->C:\\single_button4;
-double_buttons: 0; button_1 = 0x90; path->C:\\single_button5;
-double_buttons: 0; button_1 = 0x45; path->C:\\single_button6;
-double_buttons: 0; button_1 = 0x47; path->C:\\single_button7;
+double_buttons: 0; button_1 = 0x70; path->C:\\Windows\\system32\\calc.exe;
+double_buttons: 0; button_1 = 0x31; path->C:\\Windows\\system32\\notepad.exe;

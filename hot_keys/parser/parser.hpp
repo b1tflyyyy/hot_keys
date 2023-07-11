@@ -30,6 +30,7 @@ private:
     std::wstring m_path;
     std::wifstream m_wfin;
 
+private:
     std::map<int, std::wstring> m_single_button;
     std::vector<std::wstring> m_all_data;
     
