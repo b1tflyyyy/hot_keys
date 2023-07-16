@@ -1,32 +1,9 @@
-#include <Windows.h>
 #include <chrono>
 
+#include "../win_functions/win_functions.hpp"
+
 #include "../parser/parser.hpp"
-
-// TODO: create models single button && pair of button ?
-
-VOID run_app(LPCWSTR app_path)
-{
-    STARTUPINFO startup_info{};
-    PROCESS_INFORMATION process_information{};
-
-    ZeroMemory(&startup_info, sizeof(startup_info));
-    ZeroMemory(&process_information, sizeof(process_information));
-
-    CreateProcessW(app_path,
-                   NULL,
-                   NULL,
-                   FALSE,
-                   NULL,
-                   NULL,
-                   NULL,
-                   NULL,
-                   &startup_info,
-                   &process_information);
-
-    CloseHandle(process_information.hProcess);
-    CloseHandle(process_information.hThread);
-}
+#include "../button/button.hpp"
 
 int main()
 {  
@@ -35,25 +12,68 @@ int main()
 
     try
     {
-        parser.m_parse_all_data();
-        parser.m_set_to_map();
+        parser.parse_all_data();
+        parser.load_all_data_to_ram();
+
+#if DEBUG_LOGS
+        for (const auto& el : parser.get_buttons())
+        {
+            if (el.is_single_button())
+            {
+                std::wcout << L"single button: " << el.get_first_button() << L" app_path: " << el.get_app_path() << L" app_name: " << el.get_app_name() << L" closer_button: " << el.get_closer_button() << '\n';
+                continue;
+            }
+
+            std::wcout << L"first button: " << el.get_first_button() << " second button: " << el.get_second_button() << L" app_path: " << el.get_app_path() << L" app_name: " << el.get_app_name() << L" closer_button: " << el.get_closer_button() << '\n';
+        }
+#endif
 
         for (;;)
         {
-            for (const auto& [button_value, path] : parser.get_single_buttons())
+            for (const auto& el : parser.get_buttons())
             {
-                if (GetAsyncKeyState(button_value) & 0x8000)
+                std::this_thread::sleep_for(100ms);
+                if (el.is_single_button())
                 {
-                    run_app(path.c_str());
+                    if (GetAsyncKeyState(el.get_first_button()) & 0x8000 && GetAsyncKeyState(Button::get_closer_button()) & 0x8000)
+                    {
+                        kill_app(el.get_app_name().c_str());
+                        std::wcout << el.get_app_name() << '\n';
+                        std::this_thread::sleep_for(200ms);
+                        continue;
+                    }
+                    else if (GetAsyncKeyState(el.get_first_button()) & 0x8000)
+                    {
+                        run_app(el.get_app_path().c_str());
+                        std::this_thread::sleep_for(200ms);
+                        continue;
+                    }
+
+                    continue;
                 }
 
-                std::this_thread::sleep_for(50ms);
+                if (GetAsyncKeyState(el.get_first_button()) & 0x8000 &&
+                    GetAsyncKeyState(el.get_second_button()) & 0x8000 &&
+                    GetAsyncKeyState(Button::get_closer_button()) & 0x8000)
+                {
+                    kill_app(el.get_app_name().c_str());
+                    std::this_thread::sleep_for(200ms);
+                    continue;
+                }
+                else if (GetAsyncKeyState(el.get_first_button()) & 0x8000 && GetAsyncKeyState(el.get_second_button()) & 0x8000)
+                {
+                    run_app(el.get_app_path().c_str());
+                    std::this_thread::sleep_for(200ms);
+                    continue;
+                }
             }
         }
     }
+
     catch (const std::exception& ex)
     {
         std::cout << ex.what() << '\n';
+        std::cin.get();
     }
 
     return 0;

@@ -131,11 +131,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="button\button.cpp" />
     <ClCompile Include="parser\parser.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="win_functions\win_functions.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="button\button.hpp" />
     <ClInclude Include="parser\parser.hpp" />
+    <ClInclude Include="win_functions\win_functions.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
