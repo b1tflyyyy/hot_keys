@@ -8,9 +8,10 @@
 #include <string>
 #include <fstream>
 #include <vector>
-#include <map>
 #include <locale>
 #include <algorithm>
+
+#include "../button/button.hpp"
 
 class Parser final
 {
@@ -21,22 +22,23 @@ public:
     Parser(const Parser& other) = delete;
     Parser(const Parser&& other) = delete;
 
-    void m_set_to_map();
-    void m_parse_all_data();
+    void parse_all_data();
+    void load_all_data_to_ram();
 
-    const std::map<int, std::wstring>& get_single_buttons();
+    const std::vector<Button>& get_buttons() const;
 
 private:
     std::wstring m_path;
     std::wifstream m_wfin;
 
 private:
-    std::map<int, std::wstring> m_single_button;
+    std::vector<Button> m_buttons;
     std::vector<std::wstring> m_all_data;
     
-    int m_parse_button_value(std::wstring& wstr);
-    std::wstring m_parse_path(std::wstring& wstr);
-    bool m_is_double_button(const std::wstring& wstr);
+    std::pair<int, int> m_parse_button_value(const std::wstring& wstr);
+    void m_parse_app_name(std::wstring& wstr);
+    void m_parse_path(std::wstring& wstr);
+    bool m_is_single_button(const std::wstring_view wstr);
 };
 
 #endif // !PARSER_HPP
