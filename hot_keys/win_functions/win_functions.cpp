@@ -6,6 +6,8 @@ VOID run_app(const LPCWSTR& app_path)
     PROCESS_INFORMATION process_information{};
 
     ZeroMemory(&startup_info, sizeof(startup_info));
+    startup_info.cb = sizeof(startup_info);
+
     ZeroMemory(&process_information, sizeof(process_information));
 
     CreateProcessW(app_path,
@@ -13,7 +15,7 @@ VOID run_app(const LPCWSTR& app_path)
                    nullptr,
                    nullptr,
                    FALSE,
-                   NULL,
+                   CREATE_NEW_CONSOLE,
                    nullptr,
                    nullptr,
                    &startup_info,
